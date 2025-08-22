@@ -14,26 +14,26 @@ export default function Signin() {
         e.preventDefault();
         setMessage("");
 
-        // try {
-        //     const response = await axios.post(
-        //         "http://127.0.0.1:5000/signin",
-        //         form
-        //     );
-        //     console.log(response);
-        //    // const token = response.data.token;
+        try {
+            const response = await axios.post(
+                "http://127.0.0.1:5000/signin",
+                form
+            );
+            console.log(response);
+           // const token = response.data.token;
 
-        //     // Store token locally (optional)
-        //     //localStorage.setItem("token", token);
+            // Store token locally (optional)
+            //localStorage.setItem("token", token);
 
-        //    // setMessage("✅ Login successful!");
-        // } catch (error) {
-        //     console.log(error);
-        //     if (error.response) {
-        //         setMessage("❌ " + error.response.data.message);
-        //     } else {
-        //         setMessage("❌ Server error");
-        //     }
-        // }
+           // setMessage("✅ Login successful!");
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                setMessage("❌ " + error.response.data.message);
+            } else {
+                setMessage("❌ Server error");
+            }
+        }
     };
 
     return (

@@ -14,19 +14,19 @@ export default function Signup() {
         e.preventDefault();
         setMessage("");
 
-        // try {
-        //     const response = await axios.post(
-        //         "http://127.0.0.1:5000/signup",
-        //         form
-        //     );
-        //     setMessage("✅ " + response.data.message);
-        // } catch (error) {
-        //     if (error.response) {
-        //         setMessage("❌ " +error.response.data.message);
-        //     } else {
-        //         setMessage("❌ Server error");
-        //     }
-        // }
+        try {
+            const response = await axios.post(
+                "http://127.0.0.1:5000/signup",
+                form
+            );
+            setMessage("✅ " + response.data.message);
+        } catch (error) {
+            if (error.response) {
+                setMessage("❌ " +error.response.data.message);
+            } else {
+                setMessage("❌ Server error");
+            }
+        }
     };
 
     return (
