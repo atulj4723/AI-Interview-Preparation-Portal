@@ -15,14 +15,14 @@ export default function Signup() {
         setMessage("");
 
         try {
-            const response = await axios.post(
-                "http://127.0.0.1:5000/signup",
+            const {data} = await axios.post(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/signup`,
                 form
             );
-            setMessage("✅ " + response.data.message);
+            setMessage("✅ " + data.message);
         } catch (error) {
             if (error.response) {
-                setMessage("❌ " +error.response.data.message);
+                setMessage("❌ " +error.response.data.error);
             } else {
                 setMessage("❌ Server error");
             }

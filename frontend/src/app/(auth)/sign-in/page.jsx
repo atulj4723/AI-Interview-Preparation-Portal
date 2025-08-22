@@ -13,23 +13,21 @@ export default function Signin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
-
         try {
-            const response = await axios.post(
-                "http://127.0.0.1:5000/signin",
+            const { data } = await axios.post(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/signin`,
                 form
             );
-            console.log(response);
-           // const token = response.data.token;
+
+            // const token = response.data.token;
 
             // Store token locally (optional)
             //localStorage.setItem("token", token);
 
-           // setMessage("✅ Login successful!");
+            setMessage("✅ Login successful!");
         } catch (error) {
-            console.log(error);
             if (error.response) {
-                setMessage("❌ " + error.response.data.message);
+                setMessage("❌ " + error.response.data.error);
             } else {
                 setMessage("❌ Server error");
             }
@@ -41,12 +39,12 @@ export default function Signin() {
             <h2>Sign In</h2>
             <form onSubmit={handleSubmit}>
                 <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
+                    name="identifier"
+                    type="text"
+                    placeholder="identifier"
                     required
                     onChange={handleChange}
-                    value={form.email}
+                    value={form.identifier}
                 />
                 <br />
                 <br />

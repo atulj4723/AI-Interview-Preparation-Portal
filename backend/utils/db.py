@@ -1,3 +1,7 @@
 from pymongo import MongoClient
-client= MongoClient("mongodb://localhost:27017/")
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+client= MongoClient(os.getenv('MONGODB_URI'))
 db = client["AIInterview"]
