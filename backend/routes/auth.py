@@ -7,36 +7,32 @@ auth_bp = Blueprint('auth', __name__)
 def signup():
     data = request.get_json()
     if not data:
-        return jsonify({"error":"No data provided"}), 400
+        return jsonify({"message":"No data provided"}), 400
     
     try:
         userData=User(**data)
     except ValidationError as e:
-        error_details = []
-        for error in e.errors():
-            error_details.append({
-                "field": ".".join(str(loc) for loc in error["loc"]), # e.g., "phone"
-                "message": error["msg"] # The error message string
-            })
-        return  jsonify({"error": "Invalid data provided", "details": error_details}), 422
+        error = e.errors()[0]["msg"]
+        
+        return  jsonify({"message": error}), 422
     
     check=FindUserByEmail(data['email'])
     if check:
-        return jsonify({"error":"User Already exist"}),402
+        return jsonify({"message":"User Already exist"}),402
     
     try:
-        createUser(data['name'],data['email'],data['password'],data['phone'])
+        user= createUser(data['name'],data['email'],data['password'],data['phone'])
     except Exception as e:
-        return jsonify({"error":"Could not create user in database","details":str(e)}),500
+        return jsonify({"message":"Could not create user in database","details":str(e)}),500
     
-    return jsonify({ "message": "User created successfully!"}), 201
+    return jsonify({ "message": "User created successfully!","data":user}), 201
 
 @auth_bp.route("/signin",methods=["POST"])
 def signin():
     data = request.get_json()
     if not data:
-        return jsonify({"error":"No data provided"}), 400
-    if not Login(data['email'],data['password']):
-        return jsonify({"error":"Wrong Credentials"}),400
-
-    return "signin"
+        return jsonify({"message":"No data provided"}), 400
+    user=Login(data['email'],data['password'])
+    if not user:
+        return jsonify({"message":"Wrong Credentials"}),400
+    return jsonify({ "message": "User created successfully!","data":user}), 201

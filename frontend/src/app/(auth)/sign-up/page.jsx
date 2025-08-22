@@ -15,11 +15,14 @@ export default function Signup() {
         setMessage("");
 
         try {
-            const response = await axios.post("http://127.0.0.1:5000/api/signup", form);
+            const response = await axios.post(
+                "http://127.0.0.1:5000/signup",
+                form
+            );
             setMessage("✅ " + response.data.message);
         } catch (error) {
             if (error.response) {
-                setMessage("❌ " + error.response.data.message);
+                setMessage("❌ " +error.response.data.message);
             } else {
                 setMessage("❌ Server error");
             }
@@ -37,6 +40,26 @@ export default function Signup() {
                     required
                     onChange={handleChange}
                     value={form.email}
+                />
+                <br />
+                <br />
+                <input
+                    name="phone"
+                    type="phone"
+                    placeholder="phone"
+                    required
+                    onChange={handleChange}
+                    value={form.phone}
+                />
+                <br />
+                <br />
+                <input
+                    name="name"
+                    type="name"
+                    placeholder="name"
+                    required
+                    onChange={handleChange}
+                    value={form.name}
                 />
                 <br />
                 <br />

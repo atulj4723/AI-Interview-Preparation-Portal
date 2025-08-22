@@ -10,10 +10,13 @@ def createUser(name,email,password,phone):
     return res.inserted_id
 def FindUserByEmail(email):
     res=db.users.find_one({"email":email})
-    return res
+    if res:
+        return res
 def Login(email,password):
     res=FindUserByEmail(email)
-    login_password_bytes = password.encode('utf-8')
-    password=res['password']
-    is_match = bcrypt.checkpw(login_password_bytes, password)
-    return is_match
+    if res:
+        login_password_bytes = password.encode('utf-8')
+        password=res['password']
+        is_match = bcrypt.checkpw(login_password_bytes, password)
+        if is_match:
+            return res
