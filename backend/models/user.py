@@ -1,14 +1,16 @@
 from pydantic import BaseModel, EmailStr, constr, field_validator
 import re
 
-# This model is ONLY for validating incoming data from the signup form.
-
 class User(BaseModel):
-    name: constr(min_length=5)
+    name: str
     email: EmailStr
-    password: constr(min_length=8)
+    password: str
     phone: str
-
+    @field_validator('name')
+    def validate_name_length(cls, value):
+        if len(value) < 5:
+            raise ValueError("Name should have at least 5 characters.")
+        return value
     @field_validator('phone')
     def validate_phone_number(cls, value):
         phone_str = str(value)
@@ -19,6 +21,8 @@ class User(BaseModel):
 
     @field_validator('password')
     def validate_password_strength(cls, value):
+        if len(value) < 8:
+            raise ValueError('Password must be at least 8 characters long.')
         if not re.search(r'[a-z]', value):
             raise ValueError('Password must contain a lowercase letter.')
         if not re.search(r'[A-Z]', value):

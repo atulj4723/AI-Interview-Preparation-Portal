@@ -1,7 +1,7 @@
 from utils.db import db
 from datetime import datetime
-from flask import jsonify
 import bcrypt
+from bson import ObjectId
 def createUser(name,email,password,phone):
     password_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
@@ -32,3 +32,13 @@ def Login(identifier,password):
     if is_match:
         return res
     return None
+def FindUserById(user_id):
+    try:
+        user_obj_id = ObjectId(user_id)
+        res = db.users.find_one({"_id": user_obj_id})
+        res['_id']=str(res['_id'])
+        print(res)
+        return res
+    except Exception as e:
+        print("Error in FindUserById:", e)
+        return None

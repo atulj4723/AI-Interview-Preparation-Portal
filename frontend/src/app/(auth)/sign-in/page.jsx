@@ -1,66 +1,74 @@
 "use client";
-import { useState } from "react";
+
+import { useUser } from "@/utils/UserData";
 import axios from "axios";
+import { useState } from "react";
 
-export default function Signin() {
-    const [form, setForm] = useState({ email: "", password: "" });
-    const [message, setMessage] = useState("");
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
+const login = () => {
+    const [formData, setFormData] = useState({
+        password: "",
+        identifier: "",
+    });
+    const { setUser } = useUser();
+    const handleSend = async (e) => {
         e.preventDefault();
-        setMessage("");
         try {
-            const { data } = await axios.post(
+            const res = await axios.post(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/signin`,
-                form
+                formData,
+                { withCredentials: true }
             );
-
-            // const token = response.data.token;
-
-            // Store token locally (optional)
-            //localStorage.setItem("token", token);
-
-            setMessage("✅ Login successful!");
-        } catch (error) {
-            if (error.response) {
-                setMessage("❌ " + error.response.data.error);
-            } else {
-                setMessage("❌ Server error");
+            console.log(res.data);
+            if (res.data.success) {
+                setUser(res.data.data);
+                window.location.href = "/home";
             }
+        } catch (err) {
+            console.log(err);
         }
     };
-
     return (
-        <div style={{ maxWidth: "400px", margin: "auto" }}>
-            <h2>Sign In</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    name="identifier"
-                    type="text"
-                    placeholder="identifier"
-                    required
-                    onChange={handleChange}
-                    value={form.identifier}
-                />
-                <br />
-                <br />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    onChange={handleChange}
-                    value={form.password}
-                />
-                <br />
-                <br />
-                <button type="submit">Login</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="w-full h-screen bg-gray-900 flex  items-center sm:flex-row">
+            <div className="w-full h-screen flex justify-center items-center flex-col sm:w-6/12">
+                <h1 className="text-5xl font-sans my-10 font-bold">LOGIN</h1>
+                <form
+                    onSubmit={handleSend}
+                    className="h-[55vh] w-[85vw] flex items-center justify-center sm:w-[50vh] gap-5 flex-col rounded-2xl border-purple-500 border-1 bg-gray-950/30 backdrop-blur-none shadow-md shadow-purple-500">
+                    <input
+                        type="text"
+                        placeholder="Enter email or phone number"
+                        name="identifier"
+                        value={formData.identifier}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                identifier: e.target.value,
+                            })
+                        }
+                        className=" border-1 border-gray-500 px-4 w-[60vw] h-[5vh] sm:w-[19vw] rounded-md"></input>
+
+                    <input
+                        type="password"
+                        placeholder="Enter password"
+                        name="password"
+                        value={formData.password}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                password: e.target.value,
+                            })
+                        }
+                        className="border-1 border-gray-500 px-4 w-[60vw] h-[5vh] sm:w-[19vw] rounded-md"></input>
+
+                    <button
+                        type="submit"
+                        className="border-1 border-gray-500  w-[50vw] h-[5vh] sm:w-[12vw] rounded-md">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div className="h-full sm:w-6/12"></div>
         </div>
     );
-}
+};
+export default login;

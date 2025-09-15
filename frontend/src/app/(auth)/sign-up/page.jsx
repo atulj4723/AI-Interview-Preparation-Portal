@@ -1,81 +1,102 @@
 "use client";
-import { useState } from "react";
+
+import { useUser } from "@/utils/UserData";
 import axios from "axios";
+import { useState } from "react";
 
-export default function Signup() {
-    const [form, setForm] = useState({ email: "", password: "" });
-    const [message, setMessage] = useState("");
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+const signup = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phone: "",
+    });
+    const [error, setError] = useState("");
+    const handleFormChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
-
+    const { setUser } = useUser();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage("");
-
         try {
-            const {data} = await axios.post(
+            const res = await axios.post(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/signup`,
-                form
+                formData,
+                { withCredentials: true }
             );
-            setMessage("✅ " + data.message);
-        } catch (error) {
-            if (error.response) {
-                setMessage("❌ " +error.response.data.error);
+            if (res.data.success) {
+                setUser(res.data.data);
+                window.location.href = "/home";
             } else {
-                setMessage("❌ Server error");
             }
+        } catch (err) {
+            console.log(err.response.data.error);
+            setError(err.response.data.error);
         }
     };
-
     return (
-        <div style={{ maxWidth: "400px", margin: "auto" }}>
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    onChange={handleChange}
-                    value={form.email}
-                />
-                <br />
-                <br />
-                <input
-                    name="phone"
-                    type="phone"
-                    placeholder="phone"
-                    required
-                    onChange={handleChange}
-                    value={form.phone}
-                />
-                <br />
-                <br />
-                <input
-                    name="name"
-                    type="name"
-                    placeholder="name"
-                    required
-                    onChange={handleChange}
-                    value={form.name}
-                />
-                <br />
-                <br />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    onChange={handleChange}
-                    value={form.password}
-                />
-                <br />
-                <br />
-                <button type="submit">Sign Up</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="w-full h-screen bg-gray-900 flex  items-center flex-col sm:flex-row  ">
+            <div className="w-full h-screen flex ju items-center ju flex-col sm:w-6/12">
+                <h1 className="text-5xl font-sans my-10 font-bold">SIGN-UP</h1>
+                <form
+                    onSubmit={handleSubmit}
+                    className="h-[65vh] w-[85vw] sm:w-[50vh] flex items-center justify-evenly flex-col rounded-2xl border-purple-500 border-1 bg-gray-950/30 backdrop-blur-none shadow-md shadow-purple-500">
+                    <input
+                        type="text"
+                        placeholder="Enter your name"
+                        name="name"
+                        onChange={handleFormChange}
+                        value={formData.name}
+                        className=" border-1 border-gray-500 px-4 sm:w-[19vw] w-[60vw] h-[5vh] rounded-md"></input>
+
+                    <input
+                        type="email"
+                        placeholder="Enter your email"
+                        onChange={handleFormChange}
+                        name="email"
+                        value={formData.email}
+                        className="border-1 border-gray-500 px-4 sm:w-[19vw] w-[60vw] h-[5vh] rounded-md"></input>
+                    <input
+                        type="phone"
+                        placeholder="Enter your phone number"
+                        onChange={handleFormChange}
+                        name="phone"
+                        value={formData.phone}
+                        className="border-1 border-gray-500 px-4 sm:w-[19vw] w-[60vw] h-[5vh] rounded-md"></input>
+                    <input
+                        type="password"
+                        placeholder="Create password"
+                        onChange={handleFormChange}
+                        name="password"
+                        value={formData.password}
+                        className="border-1 border-gray-500 px-4 sm:w-[19vw] w-[60vw] h-[5vh] rounded-md"></input>
+                    <input
+                        type="password"
+                        placeholder="Confirm password"
+                        onChange={handleFormChange}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        className="border-1 border-gray-500 px-4 sm:w-[19vw] w-[60vw] h-[5vh] rounded-md"></input>
+                    {error && <p className="text-red-500">{error}</p>}
+                    <button
+                        type="submit"
+                        className="border-1 border-gray-500 sm:w-[12vw]  w-[50vw] h-[5vh] rounded-md">
+                        Submit
+                    </button>
+                    <p className="text-gray-500">
+                        Alredy have an account?{" "}
+                        <a href="/sign-in" className="text-sky-500">
+                            Login
+                        </a>
+                    </p>
+                </form>
+            </div>
+            <div className="w-full h-screen flex   sm:w-6/12"></div>
         </div>
     );
-}
+};
+export default signup;
