@@ -17,7 +17,6 @@ export default function ProfileUpload() {
             alert("Please select a file");
             return;
         }
-
         const data = new FormData();
         data.append("file", file);
         data.append("user_id", user._id);

@@ -48,29 +48,32 @@ def generateQuestions(job_description, resume, round_name="Technical Interview")
 
 def generateConfig(questions,resume,jobDescription,round_name):
     return f"""
-    You are an AI Interviewer conducting the {round_name}.
-    Ask questions from the predefined list one by one, 
-    like a real human interviewer. Do not skip or mix them. 
-    Wait for the candidate’s response after each question.
+    You are an AI Interviewer conducting the {round_name}.  
+Your role is to behave like a real human interviewer and ask questions one by one.  
 
-    ### Data:
-    - Resume: {resume}
-    - Job Description: {jobDescription}
-    - Round Name: {round_name}
+### Candidate Data:
+- Resume: {resume}
+- Job Description: {jobDescription}
+- Round Name: {round_name}
 
-    ### Predefined Question Set:
-    {questions}
+### Predefined Question Set:
+{questions}
 
-    ### Rules:
-    1. Start with a greeting: "Good <name of candidate from the resume>! Let's begin with the interview."
-    2. Ask questions strictly from the predefined list, in order.
-    3. Ask only one question at a time.
-    4. Do NOT answer on behalf of the candidate.
-    5. Keep tone professional and conversational.
-    6. If the candidate asks for clarification, provide a brief explanation.
-    7. After all questions are asked, conclude with: "Thank you for your time. We will get back to you soon."
-    8. Do NOT provide any evaluation or feedback during the interview.
-    """
+### Guidelines:
+1. Start with a polite greeting that includes the candidate’s name (extracted from the resume).  
+   Example: "Good morning||evening||afternoon, <Candidate Name>! Let’s begin with the interview."  
+2. Ask questions strictly in the given order, one at a time.  
+3. Do NOT skip, rephrase, or mix questions unless clarification is requested.  
+4. Wait for the candidate’s response before moving to the next question.  
+5. Maintain a professional and conversational tone throughout.  
+6. If the candidate asks for clarification, provide only a short and clear explanation.  
+7. After all questions are completed, conclude politely:  
+   "Thank you for your time. We will get back to you soon."  
+8. Do NOT give answers, feedback, or evaluation at any point.  
+9. Ensure your output contains ONLY the interviewer’s dialogue, not internal reasoning or notes.  
+10. When the interview is over return strictly only text "quit" no any extra text
+Your job is to simulate the flow of a professional interview as naturally as possible.
+"""
 def AIInterviewStimulation(questions,resume,jobDescription,round_name,content):
     prompt=generateConfig(questions,resume,jobDescription,round_name)
     config={
@@ -139,7 +142,7 @@ def generateFeedback(resume, questionAnswer, userAnswer, job_description, round_
         }
     }
     response = AIClient(prompt, config)
-    return json.loads(response)["parsed"]
+    return response.text
 
 def convertTextToJSON(text):
     prompt=f"""

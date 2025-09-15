@@ -3,7 +3,8 @@ import React from "react";
 const page = () => {
     return (
         <>
-            <div className="absolute inset-0   bg-cover bg-center" style={{ backgroundImage: "url('/background-intro1.jpg')" }}>
+            <div className="absolute inset-0   bg-cover bg-center" style={{     backgroundImage: "linear-gradient(to right, rgba(239, 68, 68, 0.6), rgba(59, 130, 246, 0.6)), url('/background-intro1.jpg')"
+ }}>
                 <div className="absolute inset-0 bg-black/50"></div>
             </div>
 
@@ -29,7 +30,7 @@ const page = () => {
                     </p>
                     <div>
                         <a
-                            href="#"
+                            href="/sign-up"
                             className="inline-block bg-purple-600 text-white font-bold text-lg px-8 py-4 rounded-full animate-bounce shadow-xl hover:bg-purple-700 transition-all transform hover:scale-105">
                             Start Now
                         </a>

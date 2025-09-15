@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from service.interview import createInterview, getInterview,getSpecificInterview
-from service.ai import AIInterviewStimulation,generateFeedback,generateQuestions
+from service.ai import generateQuestions
 import json
 interview_bp = Blueprint('interview', __name__)
 @interview_bp.route("/interview", methods=["POST"])
@@ -70,8 +70,7 @@ def get_specific_interview(interview_id):
                 "success": False,
                 "error": "Interview not found"
             }), 404
-        if "_id" in interview:
-            interview["_id"] = str(interview["_id"])
+        interview["_id"] = str(interview["_id"])
     except Exception as e:
         return jsonify({
             "success": False,

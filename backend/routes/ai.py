@@ -3,7 +3,7 @@ import json
 import requests
 from service.ai import generateQuestions,generateFeedback,AIInterviewStimulation
 ai_bp=Blueprint('ai',__name__)
- 
+
 @ai_bp.route("/generate-feedback",methods=["POST"])
 def feedbackGeneration():
     data=request.get_json()

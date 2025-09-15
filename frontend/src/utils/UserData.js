@@ -12,12 +12,10 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const fetchUserAndResume = async () => {
             try {
-                // Step 1: Verify user
                 const res = await axios.get(
                     `${process.env.NEXT_PUBLIC_BASE_URL}/verify`,
                     { withCredentials: true }
                 );
-
                 if (res.data.success) {
                     const verifiedUser = res.data.data;
                     setUser(verifiedUser);

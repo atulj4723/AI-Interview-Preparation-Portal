@@ -32,13 +32,11 @@ const page = () => {
             return;
         }
         try {
-            // const res = await axios.post(
-            //     `${process.env.NEXT_PUBLIC_BASE_URL}/interview`,
-            //     formData
-            // );
-            router.push(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/interview/${user._id}`
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/interview`,
+                formData
             );
+            router.push(`/interview/${res.data.data._id}`);
         } catch (e) {
             console.log(e);
         }
@@ -94,7 +92,7 @@ const page = () => {
                         <button
                             className="bg-gradient-to-r from-purple-600 to-purple-800 text-white font-bold text-lg px-10 py-4 rounded-full shadow-lg 
                      hover:from-purple-700 hover:to-purple-900 transform hover:scale-105 transition duration-300 ease-in-out">
-                            Start Interview
+                            Submit
                         </button>
                     </div>
                 </form>

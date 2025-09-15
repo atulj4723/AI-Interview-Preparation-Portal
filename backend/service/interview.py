@@ -2,11 +2,11 @@ from utils.db import db
 from bson import ObjectId
 def createInterview(user_id,title,round_name,description,question_answer):
     interview={
-        "userID":user_id,
+        "user_id":user_id,
         "title":title,
-        "round_name":round_name,
-        "description":description,
-        "question_answer":question_answer,
+        "roundName":round_name,
+        "jobDescription":description,
+        "questions":question_answer,
         "status": "Scheduled"
         }
     res=db.interviews.insert_one(interview)
